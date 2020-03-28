@@ -1,0 +1,7 @@
+MYSQL_ROOT_PASSWORD=password
+MYSQL_DATABASE=fastapi-sample
+MYSQL_USER=user
+MYSQL_PASSWORD=password
+MYSQL_PORT=3306
+
+

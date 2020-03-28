@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+
+export DATABASE_URL="mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}"
+
+mysql_ready() {
+python << END
+
+import os
+import sys
+import sqlalchemy as db
+
+database_url = os.getenv('DATABASE_URL')
+engine = db.create_engine(database_url)
+
+try:
+	connection = engine.connect()
+
+except Exception as ex:
+	print(ex)
+	sys.exit(-1)
+sys.exit(0)
+
+END
+}
+
+
+until mysql_ready; do
+  >&2 echo 'Waiting for Maria DB to become available...'
+  sleep 1
+done
+>&2 echo 'Maria DB is available'
+
+
+exec "$@"
+

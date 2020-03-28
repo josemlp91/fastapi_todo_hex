@@ -1,0 +1,51 @@
+version: "3.3"
+
+services:
+
+  # FastAPI
+  api:
+    build: ./docker/api
+    container_name: "fastapi-api"
+    command: /start
+    environment: &env
+      PYTHONPATH: "/home/python/app"
+      MYSQL_HOST: "fastapi-db"
+    env_file:
+      - ./.envs/.local/.mysql
+      - ./.envs/.local/.api
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/home/python/app
+    depends_on:
+      - db
+
+  # Database
+  db:
+    container_name: "fastapi-db"
+    build: ./docker/mysql
+    restart: always
+    tty: true
+    env_file:
+      - ./.envs/.local/.mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+
+  # Phpmyadmin
+  phpmyadmin:
+    container_name: fastapi-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '9090:80'
+    environment:
+      PMA_HOST: db
+    env_file:
+      - ./.envs/.local/.mysql
+    depends_on:
+      - db
+
+volumes:
+  mysql-data:
+

@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+[packages]
+alembic = "*"
+databases = {version = "*", extras = ["postgresql"]}
+fastapi = {extras = ["email_validator", "requests", "ujson"], version = "*"}
+uvicorn = "*"
+toolz = "*"
+
+mysqlclient= "*"
+pymysql= "*"
+python-dotenv = "*"
+pytest-asyncio = "*"
+aiomysql = "*"
+black = "*"
+ipython = "*"
+
+
+[dev-packages]
+pytest = "*"
+
